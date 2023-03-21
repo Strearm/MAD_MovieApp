@@ -52,7 +52,7 @@ class MainActivity : ComponentActivity() {
         }
     }
 }
-//standard Modifier!yoooo
+//standard Modifier!
 val standardMod: Modifier = Modifier.fillMaxWidth().padding(5.dp)
 
 @Composable
