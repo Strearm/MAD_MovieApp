@@ -77,7 +77,7 @@ fun MovieList(movies: List<Movie> = getMovies(), navController: NavController){
             items(movies) { movie ->
                 MovieRow(movie = movie) { movieID ->
                     Log.d("Movie Row", "Movie ID: $movieID")
-                    navController.navigate(route = "detailscreen")
+                    navController.navigate(route = "detailscreen/" + movie.title)
                 }
             }
         }
