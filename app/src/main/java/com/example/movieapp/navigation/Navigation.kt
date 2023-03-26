@@ -9,20 +9,22 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.example.movieapp.screens.DetailScreen
+import com.example.movieapp.screens.FavouriteScreen
 import com.example.movieapp.screens.HomeScreen
 
 @Composable
-fun MyNavigation(){
+fun MyNavigation() {
     val navController = rememberNavController()
-    NavHost(navController = navController, startDestination = "homescreen"){
+    NavHost(navController = navController, startDestination = "homescreen") {
+        composable("favourites") { FavouriteScreen(navController = navController) }
         composable("homescreen") { HomeScreen(navController = navController) }
-        composable(
-            "detailscreen/{movieName}",
-            arguments = listOf(navArgument("movieName"){
-            type = NavType.StringType
-        })
+        composable("detailscreen/{id}",
+            arguments = listOf( navArgument("id") { type = NavType.StringType })
         ) {
-            Log.d("args", it.arguments?.getString("movieName").toString())
-            DetailScreen(navController = navController, movieName = it.arguments?.getString("movieName").toString()) }
+            DetailScreen(
+                navController = navController,
+                id = it.arguments?.getString("id").toString()
+            )
+        }
     }
 }

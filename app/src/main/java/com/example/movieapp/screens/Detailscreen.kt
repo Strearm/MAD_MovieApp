@@ -1,49 +1,56 @@
 package com.example.movieapp.screens
 
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.CornerSize
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Favorite
-import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import coil.compose.AsyncImage
+import com.example.movieapp.MovieRow
+import com.example.movieapp.SimpleMenuBar
+import com.example.movieapp.models.Movie
+import com.example.movieapp.models.getMovies
 
 @Composable
-fun DetailScreen( navController: NavController, movieName: String){
+fun DetailScreen( navController: NavController,
+                  id: String,
+){
+    val thisMovie = getMovie(id = id)
     Surface(
         modifier = Modifier.fillMaxSize(),
         color = MaterialTheme.colors.background
     ) {
         Column {
-            MenuBar(movieName)
+            SimpleMenuBar(thisMovie!!.title, navController)
+            MovieRow(thisMovie){ run {} }
+            ImageRow(thisMovie)
         }
     }
 }
-
 @Composable
-private fun MenuBar(movieName: String){
-    var expanded by remember{
-        mutableStateOf(false)
-    }
-    TopAppBar(modifier = Modifier
-        .fillMaxWidth(),
-    ) {
-        Text(text = movieName)
-        Spacer(Modifier.weight(1f))
-        Box(){
-            IconButton(onClick = {expanded = true}) {
-                Icon(imageVector = Icons.Default.MoreVert, contentDescription = "Open Menu")
-            }
-            DropdownMenu(expanded = expanded,
-                onDismissRequest = { expanded = false },
-            ){
-                DropdownMenuItem(onClick = { expanded = false }
+fun ImageRow(movie: Movie){
+    Row {
+        LazyRow{
+            items(movie.images){image ->
+                Card(modifier = Modifier.padding(5.dp).size(300.dp,200.dp),
+                    shape = RoundedCornerShape(corner = CornerSize(15.dp)),
+                    elevation = 5.dp
                 ) {
-                    Icon(imageVector = Icons.Default.Favorite, contentDescription = "favourite Heart" )
-                    Text(text = "Favourites")
+                    AsyncImage(model = image,
+                        contentDescription = "Image",
+                        contentScale = ContentScale.Crop)
                 }
             }
         }
+
     }
+}
+private fun getMovie(movieList: List<Movie> = getMovies(), id: String): Movie? {
+    return movieList.find { it.id == id }
 }
