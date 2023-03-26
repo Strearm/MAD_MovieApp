@@ -8,6 +8,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavController
 import com.example.movieapp.MovieRow
+import com.example.movieapp.Screen
 import com.example.movieapp.SimpleMenuBar
 import com.example.movieapp.models.Movie
 import com.example.movieapp.models.getFavourites
@@ -32,7 +33,7 @@ private fun FavouriteList(favourites: List<Movie> = getFavourites(), navControll
             items(favourites) { movie ->
                 MovieRow(movie = movie) { movieID ->
                     navController.navigate(
-                        route = "detailscreen/$movieID"
+                        route = Screen.Detail.route
                     )
                 }
             }

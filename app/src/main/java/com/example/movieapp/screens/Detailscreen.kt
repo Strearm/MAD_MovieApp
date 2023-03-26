@@ -39,7 +39,7 @@ fun ImageRow(movie: Movie){
         LazyRow{
             items(movie.images){image ->
                 Card(modifier = Modifier.padding(5.dp).size(300.dp,200.dp),
-                    shape = RoundedCornerShape(corner = CornerSize(15.dp)),
+                    shape = RoundedCornerShape(corner = CornerSize(5.dp)),
                     elevation = 5.dp
                 ) {
                     AsyncImage(model = image,

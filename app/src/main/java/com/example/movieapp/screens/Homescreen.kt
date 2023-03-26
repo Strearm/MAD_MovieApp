@@ -11,7 +11,9 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import com.example.movieapp.MenuButton
 import com.example.movieapp.MovieRow
+import com.example.movieapp.Screen
 import com.example.movieapp.models.Movie
 import com.example.movieapp.models.getMovies
 
@@ -30,35 +32,14 @@ fun HomeScreen(navController: NavController){
 }
 @Composable
 fun MenuBar(menuText: String = "Menu", navController: NavController) {
-    var expanded by remember {
-        mutableStateOf(false)
-    }
+
     TopAppBar(
         modifier = Modifier
             .fillMaxWidth(),
     ) {
         Text(text = menuText)
         Spacer(Modifier.weight(1f))
-        Box() {
-            IconButton(onClick = { expanded = true }) {
-                Icon(imageVector = Icons.Default.MoreVert, contentDescription = "Open Menu")
-            }
-            DropdownMenu(
-                expanded = expanded,
-                onDismissRequest = { expanded = false },
-            ) {
-                DropdownMenuItem(onClick = {
-                    navController.navigate("favourites")
-                }
-                ) {
-                    Icon(
-                        imageVector = Icons.Default.Favorite,
-                        contentDescription = "Menu Favourites"
-                    )
-                    Text(text = "Favourites")
-                } //DropdownMenuItem end
-            } //DropdownMenu end
-        } //Box end
+        MenuButton(navController = navController)
     } //TopAppBar end
 }
 @Composable
@@ -81,7 +62,7 @@ private fun MovieList(movies: List<Movie> = getMovies(), navController: NavContr
             items(movies) { movie ->
                 MovieRow(movie = movie) { movieID ->
                     navController.navigate(
-                        route = "detailscreen/$movieID"
+                        route = Screen.Detail.passId(movieID)
                     )
                 }
             }
