@@ -6,25 +6,31 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
-import com.example.movieapp.MOVIE_KEY
-import com.example.movieapp.Screen
-import com.example.movieapp.screens.DetailScreen
-import com.example.movieapp.screens.FavouriteScreen
-import com.example.movieapp.screens.HomeScreen
+import com.example.movieapp.screens.*
 
 @Composable
-fun MyNavigation() {
+fun Navigation() {
     val navController = rememberNavController()
-    NavHost(navController = navController, startDestination = Screen.Home.route) {
-        composable(route = Screen.Favourite.route) { FavouriteScreen(navController = navController) }
-        composable(route = Screen.Home.route) { HomeScreen(navController = navController) }
-        composable(route = Screen.Detail.route,
-            arguments = listOf( navArgument(MOVIE_KEY) { type = NavType.StringType })
-        ) {
-            DetailScreen(
-                navController = navController,
-                id = it.arguments?.getString(MOVIE_KEY).toString()
-            )
+    NavHost(navController = navController, startDestination = Screen.MainScreen.route) {
+        composable(route = Screen.MainScreen.route){
+            HomeScreen(navController = navController)
+        }
+
+        composable(Screen.FavoriteScreen.route) {
+            FavoriteScreen(navController = navController)
+        }
+
+        composable(Screen.AddMovieScreen.route) {
+            AddMovieScreen(navController = navController)
+        }
+
+        // build a route like: root/detail-screen/id=34
+        composable(
+            Screen.DetailScreen.route,
+            arguments = listOf(navArgument(name = DETAIL_ARGUMENT_KEY) {type = NavType.StringType})
+        ) { backStackEntry ->    // backstack contains all information from navhost
+            DetailScreen(navController = navController, backStackEntry.arguments?.getString(
+                DETAIL_ARGUMENT_KEY))   // get the argument from navhost that will be passed
         }
     }
 }
