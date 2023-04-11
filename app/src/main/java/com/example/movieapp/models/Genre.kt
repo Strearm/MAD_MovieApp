@@ -1,6 +1,6 @@
 package com.example.movieapp.models
 
-enum class Genre {
+enum class Genre{
     ACTION,
     ADVENTURE,
     BIOGRAPHY,
