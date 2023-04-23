@@ -24,11 +24,13 @@ import com.example.movieapp.MovieViewModel
 import com.example.movieapp.MovieViewModelFactory
 import com.example.movieapp.data.MovieDataBase
 import com.example.movieapp.models.Movie
+import com.example.movieapp.models.getMovies
 import com.example.movieapp.repositories.MovieRepository
 import com.example.movieapp.viewModelFactories.HomeViewModelFactory
 import com.example.movieapp.viewModels.HomeViewModel
 import com.example.movieapp.widgets.HomeTopAppBar
 import com.example.movieapp.widgets.MovieRow
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
 @Composable
@@ -38,7 +40,10 @@ fun HomeScreen(navController: NavController = rememberNavController()){
     val factory = HomeViewModelFactory(repository = repository)
     val movieViewModel: HomeViewModel = viewModel(factory = factory)
 
+    val coroutineScope = rememberCoroutineScope()
+
     val movieListState by movieViewModel.movieList.collectAsState()
+
 
     Scaffold(topBar = {
         HomeTopAppBar(
@@ -63,7 +68,7 @@ fun HomeScreen(navController: NavController = rememberNavController()){
             }
         )
     }) { padding ->
-        MovieList(modifier = Modifier.padding(padding), navController = navController, movieViewModel = movieViewModel,movieListState = movieListState )
+        MovieList(modifier = Modifier.padding(padding), navController = navController, movieViewModel = movieViewModel,movieListState = movieListState, coroutineScope = coroutineScope )
     }
 }
 
@@ -72,9 +77,10 @@ fun MovieList(
     modifier: Modifier = Modifier,
     navController: NavController,
     movieViewModel: HomeViewModel,
-    movieListState: List<Movie>
+    movieListState: List<Movie>,
+    coroutineScope: CoroutineScope
 ) {
-    val coroutineScope = rememberCoroutineScope()
+
 
     LazyColumn (
         modifier = modifier,
