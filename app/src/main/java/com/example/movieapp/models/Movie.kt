@@ -3,28 +3,30 @@ package com.example.movieapp.models
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import androidx.room.Entity
+import androidx.room.Ignore
+import androidx.room.PrimaryKey
 
+@Entity
 data class Movie(
-    val id: String,
+    @PrimaryKey(autoGenerate = true)
+    val id: Int = 0,
     val title: String,
     val year: String,
-    val genre: List<Genre>,
+    val genre: String,
     val director: String,
     val actors: String,
     val plot: String,
     val images: List<String>,
     val rating: Float = 0f,
-    val favourite: Boolean = false
-){
-    var isFavorite by mutableStateOf(favourite)
-}
-
+    var isFavourite: Boolean = false
+)
 fun getMovies(): List<Movie> {
     return listOf(
-        Movie(id = "tt0499549",
+        Movie(id = 499549,
             title = "Avatar",
             year = "2009",
-            genre = listOf(Genre.ACTION, Genre.ADVENTURE, Genre.FANTASY),
+            genre = "ACTION, ADVENTURE, FANTASY",
             director = "James Cameron",
             actors = "Sam Worthington, Zoe Saldana, Sigourney Weaver, Stephen Lang",
             plot = "A paraplegic marine dispatched to the moon Pandora on a unique mission becomes torn between following his orders and protecting the world he feels is his home.",
@@ -36,10 +38,10 @@ fun getMovies(): List<Movie> {
             rating = 7.9f
         ),
 
-        Movie(id = "tt0416449",
+        Movie(id = 416449,
             title = "300",
             year = "2006",
-            genre = listOf(Genre.ACTION, Genre.DRAMA, Genre.FANTASY),
+            genre = "ACTION, DRAMA, FANTASY",
             director = "Zack Snyder",
             actors = "Gerard Butler, Lena Headey, Dominic West, David Wenham",
             plot = "King Leonidas of Sparta and a force of 300 men fight the Persians at Thermopylae in 480 B.C.",
@@ -50,10 +52,10 @@ fun getMovies(): List<Movie> {
             rating = 7.7f
         ),
 
-        Movie(id = "tt0848228",
+        Movie(id = 848228,
             title = "The Avengers",
             year = "2012",
-            genre = listOf(Genre.ACTION, Genre.SCIFI, Genre.THRILLER),
+            genre = "ACTION, SCIFI, THRILLER",
             director = "Joss Whedon",
             actors = "Robert Downey Jr., Chris Evans, Mark Ruffalo, Chris Hemsworth",
             plot = "Earth's mightiest heroes must come together and learn to fight as a team if they are to stop the mischievous Loki and his alien army from enslaving humanity.",
@@ -64,10 +66,10 @@ fun getMovies(): List<Movie> {
                 "https://images-na.ssl-images-amazon.com/images/M/MV5BMTc3MzQ3NjA5N15BMl5BanBnXkFtZTcwMzY5OTY3Nw@@._V1_SX1777_CR0,0,1777,999_AL_.jpg"),
             rating = 8.1f),
 
-        Movie(id = "tt0993846",
+        Movie(id = 993846,
             title = "The Wolf of Wall Street",
             year = "2013",
-            genre = listOf(Genre.BIOGRAPHY, Genre.COMEDY, Genre.COMEDY),
+            genre = "BIOGRAPHY, COMEDY, COMEDY",
             director = "Martin Scorsese",
             actors = "Leonardo DiCaprio, Jonah Hill, Margot Robbie, Matthew McConaughey",
             plot = "Based on the true story of Jordan Belfort, from his rise to a wealthy stock-broker living the high life to his fall involving crime, corruption and the federal government.",
@@ -78,10 +80,10 @@ fun getMovies(): List<Movie> {
                 "https://images-na.ssl-images-amazon.com/images/M/MV5BMTgzMTg4MDI0Ml5BMl5BanBnXkFtZTgwOTY0MzQ4MDE@._V1_SY1000_CR0,0,1553,1000_AL_.jpg"),
             rating = 8.2f),
 
-        Movie(id = "tt0816692",
+        Movie(id = 816692,
             title = "Interstellar",
             year = "2014",
-            genre = listOf(Genre.ADVENTURE, Genre.DRAMA, Genre.SCIFI),
+            genre = "ADVENTURE, DRAMA, SCIFI",
             director = "Christopher Nolan",
             actors = "Ellen Burstyn, Matthew McConaughey, Mackenzie Foy, John Lithgow",
             plot = "A team of explorers travel through a wormhole in space in an attempt to ensure humanity's survival.",
@@ -91,10 +93,10 @@ fun getMovies(): List<Movie> {
                 "https://images-na.ssl-images-amazon.com/images/M/MV5BMzE3MTM0MTc3Ml5BMl5BanBnXkFtZTgwMDIyODgxMzE@._V1_SX1500_CR0,0,1500,999_AL_.jpg",
                 "https://images-na.ssl-images-amazon.com/images/M/MV5BNjYzNjE2NDk3N15BMl5BanBnXkFtZTgwNzEyODgxMzE@._V1_SX1500_CR0,0,1500,999_AL_.jpg"),
             rating = 8.6f),
-        Movie(id = "tt0944947",
+        Movie(id = 944947,
             title = "Game of Thrones",
             year = "2011 - 2018",
-            genre = listOf(Genre.ADVENTURE, Genre.DRAMA, Genre.FANTASY) ,
+            genre = "ADVENTURE, DRAMA, FANTASY",
             director = "N/A",
             actors = "Peter Dinklage, Lena Headey, Emilia Clarke, Kit Harington",
             plot = "While a civil war brews between several noble families in Westeros, the children of the former rulers of the land attempt to rise up to power. Meanwhile a forgotten race, bent on destruction, plans to return after thousands of years in the North.",
@@ -106,10 +108,10 @@ fun getMovies(): List<Movie> {
             rating = 9.5f),
 
 
-        Movie(id = "tt2306299",
+        Movie(id = 2306299,
             title = "Vikings",
             year = "2013–2020",
-            genre = listOf(Genre.ACTION, Genre.DRAMA, Genre.HISTORY),
+            genre = "ACTION, DRAMA, HISTORY",
             director = "N/A",
             actors = "Travis Fimmel, Clive Standen, Gustaf Skarsgård, Katheryn Winnick",
             plot = "The world of the Vikings is brought to life through the journey of Ragnar Lothbrok, the first Viking to emerge from Norse legend and onto the pages of history - a man on the edge of myth.",
@@ -120,10 +122,10 @@ fun getMovies(): List<Movie> {
                 "https://images-na.ssl-images-amazon.com/images/M/MV5BMTcxOTQ3NTA5N15BMl5BanBnXkFtZTgwMzExMDUxODE@._V1_SY1000_SX1500_AL_.jpg"),
             rating = 9.5f),
 
-        Movie(id = "tt0903747",
+        Movie(id = 903747,
             title = "Breaking Bad",
             year = "2008–2013",
-            genre = listOf(Genre.CRIME, Genre.DRAMA, Genre.THRILLER),
+            genre = "CRIME, DRAMA, THRILLER",
             director = "N/A",
             actors = "Bryan Cranston, Anna Gunn, Aaron Paul, Dean Norris",
             plot = "A high school chemistry teacher diagnosed with inoperable lung cancer turns to manufacturing and selling methamphetamine in order to secure his family's financial future.",
@@ -134,10 +136,10 @@ fun getMovies(): List<Movie> {
                 "https://images-na.ssl-images-amazon.com/images/M/MV5BMjA5MTE3MTgwMF5BMl5BanBnXkFtZTgwOTQxMjUzMDE@._V1_SX1500_CR0,0,1500,999_AL_.jpg"),
             rating = 9.5f),
 
-        Movie(id = "tt2707408",
+        Movie(id = 2707408,
             title = "Narcos",
             year = "2015-",
-            genre = listOf(Genre.BIOGRAPHY, Genre.CRIME, Genre.DRAMA),
+            genre = "BIOGRAPHY, CRIME, DRAMA)",
             director = "N/A",
             actors = "Wagner Moura, Boyd Holbrook, Pedro Pascal, Joanna Christie",
             plot = "A chronicled look at the criminal exploits of Colombian drug lord Pablo Escobar.",

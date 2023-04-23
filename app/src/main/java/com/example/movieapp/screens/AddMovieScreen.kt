@@ -12,20 +12,35 @@ import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.movieapp.MovieViewModel
 import com.example.movieapp.R
+import com.example.movieapp.data.MovieDataBase
 import com.example.movieapp.models.Genre
 import com.example.movieapp.models.ListItemSelectable
 import com.example.movieapp.models.Movie
+import com.example.movieapp.repositories.MovieRepository
+import com.example.movieapp.viewModelFactories.AddViewModelFactory
+import com.example.movieapp.viewModelFactories.DetailViewModelFactory
+import com.example.movieapp.viewModels.AddViewModel
+import com.example.movieapp.viewModels.DetailViewModel
 import com.example.movieapp.widgets.SimpleTopAppBar
+import kotlinx.coroutines.launch
 
 @Composable
-fun AddMovieScreen(navController: NavController, movieViewModel: MovieViewModel){
+fun AddMovieScreen(navController: NavController){
+
+    val db = MovieDataBase.getDatabase(LocalContext.current)
+    val repository = MovieRepository(movieDao = db.movieDao())
+    val factory = AddViewModelFactory(repository = repository)
+    val movieViewModel: AddViewModel = viewModel(factory = factory)
+
     val scaffoldState = rememberScaffoldState()
 
     Scaffold(
@@ -47,7 +62,8 @@ fun ErrorMessage(extra: String = ""){
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun MainContent(modifier: Modifier = Modifier, movieViewModel: MovieViewModel, navController: NavController) {
+fun MainContent(modifier: Modifier = Modifier, movieViewModel: AddViewModel, navController: NavController) {
+    val coroutineScope = rememberCoroutineScope()
     Surface(
         modifier = modifier
             .fillMaxWidth()
@@ -261,18 +277,21 @@ fun MainContent(modifier: Modifier = Modifier, movieViewModel: MovieViewModel, n
 
             Button(
                 enabled = isEnabledSaveButton,
-                onClick = { movieViewModel.addMovie(Movie(id = "${movieViewModel.movieList.size + 1}",
-                    title = title,
-                    year = year,
-                    genre = genreList,
-                    director = director,
-                    actors = actors,
-                    plot = plot,
-                    images = listOf("https://t3.ftcdn.net/jpg/02/48/42/64/360_F_248426448_NVKLywWqArG2ADUxDq6QprtIzsF82dMF.jpg"),
-                    rating = rating.toFloat(),
-                    favourite = false))
+                onClick = {
+                    coroutineScope.launch{
+                        movieViewModel.addMovie(Movie(
+                            title = title,
+                            year = year,
+                            genre = genreList.toString(),
+                            director = director,
+                            actors = actors,
+                            plot = plot,
+                            images = listOf("https://t3.ftcdn.net/jpg/02/48/42/64/360_F_248426448_NVKLywWqArG2ADUxDq6QprtIzsF82dMF.jpg"),
+                            rating = rating.toFloat(),
+                            isFavourite = false))
 
-                    navController.navigate(route = Screen.MainScreen.route)
+                        navController.navigate(route = Screen.MainScreen.route)
+                    }
                 }
             ) {
                 Text(text = stringResource(R.string.add))

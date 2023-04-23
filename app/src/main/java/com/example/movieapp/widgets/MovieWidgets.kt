@@ -9,10 +9,7 @@ import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Favorite
-import androidx.compose.material.icons.filled.FavoriteBorder
-import androidx.compose.material.icons.filled.KeyboardArrowDown
-import androidx.compose.material.icons.filled.KeyboardArrowUp
+import androidx.compose.material.icons.filled.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -37,6 +34,7 @@ import com.example.movieapp.R
 import com.example.movieapp.models.Movie
 import com.example.movieapp.models.getMovies
 import com.example.movieapp.ui.theme.Shapes
+import kotlinx.coroutines.launch
 
 
 @Composable
@@ -45,10 +43,11 @@ fun MovieRow(
     modifier: Modifier = Modifier,
     onItemClick: (String) -> Unit = {},
     onFavClick: (Movie) -> Unit = {},
+    onDelClick: (Movie) -> Unit = {},
 ) {
     Card(modifier = modifier
         .clickable {
-            onItemClick(movie.id)
+            onItemClick(movie.id.toString())
         }
         .fillMaxWidth()
         .padding(5.dp),
@@ -65,7 +64,7 @@ fun MovieRow(
                 FavoriteIcon(onFavClick, movie = movie)
             }
 
-            MovieDetails(modifier = Modifier.padding(12.dp), movie = movie)
+            MovieDetails(modifier = Modifier.padding(12.dp), movie = movie, onDelClick)
         }
     }
 }
@@ -94,23 +93,23 @@ fun FavoriteIcon(onFavClick: (Movie) -> Unit,movie: Movie) {
         .padding(10.dp),
         contentAlignment = Alignment.TopEnd
     ){
-        IconButton( onClick = { onFavClick(movie)} )
-        {
-            Icon(tint = MaterialTheme.colors.secondary,
-                imageVector = if(movie.isFavorite) Icons.Default.Favorite else Icons.Default.FavoriteBorder,
-                contentDescription = "Add to favorites",
-            )
-        }
+        Icon(tint = MaterialTheme.colors.secondary,
+            imageVector = if(movie.isFavourite) Icons.Default.Favorite else Icons.Default.FavoriteBorder,
+            contentDescription = "Add to favorites",
+            modifier = Modifier.clickable { onFavClick(movie)
+            }
+        )
     }
 }
 
 
 @Composable
-fun MovieDetails(modifier: Modifier = Modifier, movie: Movie) {
+fun MovieDetails(modifier: Modifier = Modifier, movie: Movie, onDelClick: (Movie) -> Unit) {
 
     var expanded by remember {
         mutableStateOf(false)
     }
+    val coroutineScope = rememberCoroutineScope()
 
     Row(
         modifier = modifier.fillMaxWidth(),
@@ -121,6 +120,15 @@ fun MovieDetails(modifier: Modifier = Modifier, movie: Movie) {
             modifier = Modifier.weight(6f),
             style = MaterialTheme.typography.h6
         )
+        IconButton(
+            modifier = Modifier.weight(1f),
+            onClick = {
+                coroutineScope.launch {
+                    onDelClick(movie)
+                }
+            }) {
+            Icon(imageVector = Icons.Default.Delete, contentDescription = "Delete Button")
+        }
 
         IconButton(
             modifier = Modifier.weight(1f),
